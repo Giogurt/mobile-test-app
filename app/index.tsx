@@ -1,7 +1,8 @@
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { createBasicSurvey, getBasicRecommendations } from "./lib/db/queries";
+import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
+import { router } from "expo-router";
 
 export default function Index() {
   const steps = 4;
@@ -81,18 +82,14 @@ export default function Index() {
       (option) => option.id === selectedSkinTypeId
     )!.value!;
 
-    const survey = await createBasicSurvey({
+    await createBasicSurvey({
       age: parseInt(age),
       gender,
       skinType,
       email,
     });
-    console.log("Survey created!");
-    console.log(survey.data);
 
-    // const recommendations = await getBasicRecommendations("dry", "economic");
-    // console.log("Recommendations fetched!");
-    // console.log(recommendations.data);
+    router.replace(`/recommendations?skinType=${skinType}&bundle=favorite`);
   }
 
   function renderStep() {
@@ -179,10 +176,12 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
-        <Text style={styles.titleText}>¡Sé parte del lanzamiento de Doia!</Text>
+        <Text style={styles.titleText}>
+          ¡Sé parte del lanzamiento de Derma App!
+        </Text>
         <TextInput
           style={{ fontSize: 16, height: 40, borderWidth: 1, padding: 10 }}
-          placeholder="contacto@doia.com"
+          placeholder="contacto@dermaapp.com"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
@@ -205,7 +204,7 @@ export default function Index() {
           justifyContent: "center",
         }}
       >
-        <Text>DOIA</Text>
+        <Text>DERMA APP</Text>
       </View>
       <View
         style={{
