@@ -1,7 +1,7 @@
 import { getBasicRecommendations, type Products } from "@/lib/db/queries";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { ProductCard } from "@/components/ProductCard";
 
 type RecommendationsScreenParams = {
@@ -10,8 +10,6 @@ type RecommendationsScreenParams = {
 };
 export default function RecommendationsScreen() {
   const params = useLocalSearchParams<RecommendationsScreenParams>();
-
-  console.log(params);
 
   const [recommendations, setRecommendations] = useState<Products>([]);
   const [checkout, setCheckout] = useState(false);
@@ -43,7 +41,6 @@ export default function RecommendationsScreen() {
       <View
         style={{
           flex: 7,
-          // gap: 24,
         }}
       >
         <Text style={{ marginBottom: 32 }}>

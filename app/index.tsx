@@ -1,8 +1,9 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
 import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 
 export default function Index() {
   const steps = 4;
@@ -95,17 +96,57 @@ export default function Index() {
   function renderStep() {
     switch (step) {
       case 0:
-        return ageQuestion();
+        return imageQuestion();
       case 1:
-        return genderQuestion();
+        return ageQuestion();
       case 2:
-        return skinTypeQuestion();
+        return genderQuestion();
       case 3:
+        return skinTypeQuestion();
+      case 4:
         return emailQuestion();
       default:
         return ageQuestion();
     }
   }
+
+  // Bait
+  const [image, setImage] = useState<string | null>(null);
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  function imageQuestion() {
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text>Solo demostrativo</Text>
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 200,
+              height: 200,
+            }}
+          />
+        )}
+      </View>
+    );
+  }
+
+  // Bait end
 
   function ageQuestion() {
     return (
