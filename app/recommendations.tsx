@@ -21,7 +21,6 @@ export default function RecommendationsScreen() {
         params.skinType,
         params.bundle
       );
-      console.log(result.data);
 
       setRecommendations(result.data);
     };

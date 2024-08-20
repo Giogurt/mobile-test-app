@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 export default function Index() {
-  const steps = 4;
+  const steps = 5;
   const [step, setStep] = useState(0);
 
   // Form
@@ -121,8 +121,6 @@ export default function Index() {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
