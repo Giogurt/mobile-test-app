@@ -28,14 +28,8 @@ export default function RecommendationsScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
+    <View className="flex-1 items-center m-6">
+      <View className="flex-1 flex-row justify-center">
         <Text>DERMA APP</Text>
       </View>
       <View
@@ -66,11 +60,3 @@ export default function RecommendationsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    margin: 24,
-  },
-});
