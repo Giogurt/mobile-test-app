@@ -1,7 +1,8 @@
 import { getBasicRecommendations, type Products } from "@/lib/db/queries";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
+import Button from "@/components/Button";
 import { ProductCard } from "@/components/ProductCard";
 
 type RecommendationsScreenParams = {
@@ -20,7 +21,6 @@ export default function RecommendationsScreen() {
         params.skinType,
         params.bundle
       );
-      console.log(result.data);
 
       setRecommendations(result.data);
     };
@@ -28,26 +28,19 @@ export default function RecommendationsScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Text>DERMA APP</Text>
+    <View className="flex items-center p-4 gap-y-10">
+      <View className="flex flex-row justify-center">
+        <Image
+          source={require("@/assets/logos/doia.png")}
+          className="w-20 h-[22px]"
+        />
       </View>
-      <View
-        style={{
-          flex: 7,
-        }}
-      >
-        <Text style={{ marginBottom: 32 }}>
+      <View className="flex">
+        <Text className="pb-14 text-center font-poppins-medium text-lg font-bold">
           ¡Te recomendamos los siguientes productos!
         </Text>
 
-        <View style={{ flex: 1, alignItems: "center" }}>
+        <View className="basis-2/5 items-center">
           <FlatList
             horizontal
             data={recommendations}
@@ -55,22 +48,14 @@ export default function RecommendationsScreen() {
             keyExtractor={(product) => product.id.toString()}
           />
         </View>
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+        <View className="flex gap-y-4 items-center">
+          <Text className="text-base leading-4 font-poppins font-bold">
             Total $
             {recommendations.reduce((acc, product) => acc + product.price!, 0)}
           </Text>
-          <Button onPress={() => setCheckout(true)} title="Comprar" />
+          <Button onPress={() => setCheckout(true)}>Comprar</Button>
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    margin: 24,
-  },
-});

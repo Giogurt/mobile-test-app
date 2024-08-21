@@ -1,4 +1,5 @@
-import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import Button from "@/components/Button";
 import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
@@ -6,7 +7,7 @@ import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 export default function Index() {
-  const steps = 4;
+  const steps = 5;
   const [step, setStep] = useState(0);
 
   // Form
@@ -39,7 +40,7 @@ export default function Index() {
   const skinTypeOptions: RadioButtonProps[] = useMemo(
     () => [
       {
-        id: "1", // acts as primary key, should be unique and non-empty string
+        id: "1",
         label: "Sensible",
         value: "dry",
         description:
@@ -83,12 +84,12 @@ export default function Index() {
       (option) => option.id === selectedSkinTypeId
     )!.value!;
 
-    await createBasicSurvey({
-      age: parseInt(age),
-      gender,
-      skinType,
-      email,
-    });
+    // await createBasicSurvey({
+    //   age: parseInt(age),
+    //   gender,
+    //   skinType,
+    //   email,
+    // });
 
     router.replace(`/recommendations?skinType=${skinType}&bundle=favorite`);
   }
@@ -121,8 +122,6 @@ export default function Index() {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
@@ -130,18 +129,12 @@ export default function Index() {
 
   function imageQuestion() {
     return (
-      <View style={{ alignItems: "center" }}>
+      <View className="items-center">
         <Text>Solo demostrativo</Text>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{
-              width: 200,
-              height: 200,
-            }}
-          />
-        )}
+        <Button className="rounded-full" onPress={pickImage}>
+          Select image
+        </Button>
+        {image && <Image source={{ uri: image }} className="w-50 h-50" />}
       </View>
     );
   }
@@ -150,15 +143,12 @@ export default function Index() {
 
   function ageQuestion() {
     return (
-      <View
-        style={{
-          gap: 24,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={styles.titleText}>¿Qué edad tienes?</Text>
+      <View className="flex gap-y-6 justify-center">
+        <Text className="font-poppins-medium text-lg font-bold">
+          ¿Qué edad tienes?
+        </Text>
         <TextInput
-          style={{ fontSize: 16, height: 40, borderWidth: 1, padding: 10 }}
+          className="h-16 font-poppins rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
           placeholder="21"
           keyboardType="numeric"
           value={age}
@@ -170,58 +160,87 @@ export default function Index() {
 
   function genderQuestion() {
     return (
-      <View
-        style={{
-          gap: 24,
-          justifyContent: "center",
-          alignItems: "flex-start",
-        }}
-      >
-        <Text style={styles.titleText}>¿Cuál es tu sexo biológico?</Text>
-        <RadioGroup
-          labelStyle={{ fontSize: 16, flex: 1 }}
-          radioButtons={genderOptions}
-          onPress={setSelectedGenderId}
-          selectedId={selectedGenderId}
-        />
+      <View className="flex gap-y-6 justify-center">
+        <View className="flex gap-y-2">
+          <Text className="font-poppins-medium text-lg font-bold">
+            ¿Cuál es tu sexo biológico?
+          </Text>
+          <Text className="font-poppins text-sm">
+            Selecciona la opción que más se adecue a ti.
+          </Text>
+        </View>
+        <View className="flex items-start">
+          <RadioGroup
+            containerStyle={{
+              gap: 8,
+              backgroundColor: "#F9F9F9",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+            }}
+            labelStyle={{
+              fontFamily: "poppins",
+              fontSize: 18,
+              flex: 1,
+              backgroundColor: "#F9F9F9",
+              paddingVertical: 10,
+            }}
+            radioButtons={genderOptions}
+            onPress={setSelectedGenderId}
+            selectedId={selectedGenderId}
+          />
+        </View>
       </View>
     );
   }
 
   function skinTypeQuestion() {
     return (
-      <View
-        style={{
-          gap: 24,
-          justifyContent: "center",
-          alignItems: "flex-start",
-        }}
-      >
-        <Text style={styles.titleText}>Tipo de piel</Text>
-        <RadioGroup
-          containerStyle={{ gap: 8 }}
-          labelStyle={{ fontSize: 16, flex: 1 }}
-          radioButtons={skinTypeOptions}
-          onPress={setSelectedSkinTypeId}
-          selectedId={selectedSkinTypeId}
-        />
+      <View className="flex gap-y-6 justify-center">
+        <View className="flex gap-y-2">
+          <Text className="font-poppins-medium text-lg font-bold">
+            Tipo de piel
+          </Text>
+          <Text className="font-poppins text-sm">
+            Selecciona el tipo de piel que más se adecue a tu piel.
+          </Text>
+        </View>
+        <View className="flex items-start">
+          <RadioGroup
+            containerStyle={{
+              gap: 8,
+              backgroundColor: "#F9F9F9",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+            }}
+            labelStyle={{
+              fontFamily: "poppins",
+              fontSize: 18,
+              flex: 1,
+              backgroundColor: "#F9F9F9",
+            }}
+            radioButtons={skinTypeOptions}
+            onPress={setSelectedSkinTypeId}
+            selectedId={selectedSkinTypeId}
+          />
+        </View>
       </View>
     );
   }
 
   function emailQuestion() {
     return (
-      <View
-        style={{
-          gap: 24,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={styles.titleText}>
-          ¡Sé parte del lanzamiento de Derma App!
-        </Text>
+      <View className="flex gap-y-6 justify-center">
+        <View className="flex gap-y-2">
+          <Text className="font-poppins-medium text-lg font-bold">
+            ¡Sé parte del lanzamiento de Derma App!
+          </Text>
+          <Text className="font-poppins text-sm">
+            Comparte tu correo electrónico con nosotros para enterarte de
+            futuros productos y recomendaciones para ti.
+          </Text>
+        </View>
         <TextInput
-          style={{ fontSize: 16, height: 40, borderWidth: 1, padding: 10 }}
+          className="h-16 font-poppins rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
           placeholder="contacto@dermaapp.com"
           keyboardType="email-address"
           value={email}
@@ -232,56 +251,25 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        margin: 24,
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Text>DERMA APP</Text>
+    <View className="flex p-4 gap-y-20">
+      <View className="flex flex-row justify-center">
+        <Image
+          source={require("@/assets/logos/doia.png")}
+          className="w-20 h-[22px]"
+        />
       </View>
-      <View
-        style={{
-          flex: 5,
-          gap: 24,
-        }}
-      >
+      <View className="flex gap-6">
         {renderStep()}
-        <View
-          style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}
-        >
-          {step > 0 && <Button onPress={() => handleStep(-1)} title="Atrás" />}
+        <View className="flex-row justify-end gap-2">
+          {step > 0 && <Button onPress={() => handleStep(-1)}>Atrás</Button>}
           {step < steps - 1 && (
-            <Button onPress={() => handleStep(1)} title="Siguiente" />
+            <Button onPress={() => handleStep(1)}>Siguiente</Button>
           )}
           {step === steps - 1 && (
-            <Button onPress={handleSendSurvey} title="Ver mis resultados" />
+            <Button onPress={handleSendSurvey}>Ver mis resultados</Button>
           )}
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleText: {
-    fontSize: 18,
-  },
-  // stepContainer: {
-  //   gap: 24,
-  // },
-  // reactLogo: {
-  //   height: 178,
-  //   width: 290,
-  //   bottom: 0,
-  //   left: 0,
-  //   position: "absolute",
-  // },
-});
