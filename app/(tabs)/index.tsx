@@ -1,18 +1,19 @@
-import { Image, Text, TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import Button from "@/components/Button";
 import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
 import { router } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
+import Checkbox from "expo-checkbox";
 
 export default function Index() {
-  const steps = 4;
+  const steps = 5;
   const [step, setStep] = useState(0);
 
   // Form
   const [age, setAge] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   // Radio buttons
   const genderOptions: RadioButtonProps[] = useMemo(
@@ -76,13 +77,16 @@ export default function Index() {
     setStep(step + nextStep);
   }
 
+  function selectedGender() {
+    return genderOptions.find((option) => option.id === selectedGenderId);
+  }
+
+  function selectedSkinType() {
+    return skinTypeOptions.find((option) => option.id === selectedSkinTypeId);
+  }
   async function handleSendSurvey() {
-    const gender = genderOptions.find(
-      (option) => option.id === selectedGenderId
-    )!.value!;
-    const skinType = skinTypeOptions.find(
-      (option) => option.id === selectedSkinTypeId
-    )!.value!;
+    const gender = selectedGender()!.value!;
+    const skinType = selectedSkinType()!.value!;
 
     // await createBasicSurvey({
     //   age: parseInt(age),
@@ -104,89 +108,12 @@ export default function Index() {
         return skinTypeQuestion();
       case 3:
         return emailQuestion();
+      case 4:
+        return questionsPreview();
       default:
         return ageQuestion();
     }
   }
-
-  // Bait
-  const [image, setImage] = useState<string | null>(null);
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-      cameraType: ImagePicker.CameraType.front,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-  const takeImage = async () => {
-    const cameraPermissions = await ImagePicker.getCameraPermissionsAsync();
-
-    if (!cameraPermissions.granted) {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
-    }
-
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      cameraType: ImagePicker.CameraType.front,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  function imageQuestion() {
-    return (
-      <View className="flex items-center">
-        <Text className="text-center font-poppins text-lg font-bold pb-5">
-          Toma una foto o elige una imagen
-        </Text>
-        <View className="flex flex-row gap-x-2 pb-10">
-          <Button
-            variant="outline"
-            className="rounded-full"
-            onPress={takeImage}
-          >
-            Toma una foto
-          </Button>
-          <Button
-            variant="outline"
-            className="rounded-full"
-            onPress={pickImage}
-          >
-            Seleccionar imagen
-          </Button>
-        </View>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            className="rounded-full w-[300px] h-[300px]"
-          />
-        )}
-
-        {!image && (
-          <Text className="text-center font-poppins text-lg font-bold">
-            No ha seleccionado una imagen
-          </Text>
-        )}
-      </View>
-    );
-  }
-
-  // Bait end
 
   function ageQuestion() {
     return (
@@ -297,6 +224,33 @@ export default function Index() {
     );
   }
 
+  function questionsPreview() {
+    return (
+      <View className="gap-y-6">
+        <Text className="font-bold text-lg">
+          Estos son los datos que se enviarán
+        </Text>
+        <View className="bg-doia-tertiary gap-y-2 p-5">
+          <Text className="text-base">Edad: {age}</Text>
+          <Text className="text-base">Género: {selectedGender()!.label}</Text>
+          <Text className="text-base">
+            Tipo de piel: {selectedSkinType()!.label}
+          </Text>
+          <Text className="text-base">Correo: {email}</Text>
+        </View>
+        <View className="flex-row gap-x-2 items-center">
+          <Checkbox
+            className="border-doia-dark"
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={isChecked ? "#454954" : undefined}
+          />
+          <Text className="text-sm">Acepto compartir estos datos</Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View className="flex p-4 gap-y-20">
       <View className="flex gap-6">
@@ -307,7 +261,9 @@ export default function Index() {
             <Button onPress={() => handleStep(1)}>Siguiente</Button>
           )}
           {step === steps - 1 && (
-            <Button onPress={handleSendSurvey}>Ver mis resultados</Button>
+            <Button disabled={!isChecked} onPress={handleSendSurvey}>
+              Ver mis resultados
+            </Button>
           )}
         </View>
       </View>

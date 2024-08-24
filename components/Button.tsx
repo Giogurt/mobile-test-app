@@ -34,11 +34,15 @@ function Button({
   variant = "default",
   size = "default",
   className,
+  disabled,
   ...props
 }: ButtonProps) {
   return (
     <Pressable
-      className={`${sharedStyle} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`${sharedStyle} ${variantStyles[variant]} ${
+        sizeStyles[size]
+      } ${disabled ? "opacity-50" : ""}  ${className}`}
+      disabled={disabled}
       {...props}
     >
       <Text className={`${textStyles[variant]}`}>{children as ReactNode}</Text>

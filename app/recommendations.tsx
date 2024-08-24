@@ -29,12 +29,6 @@ export default function RecommendationsScreen() {
 
   return (
     <View className="flex items-center p-4 gap-y-10">
-      <View className="flex flex-row justify-center">
-        <Image
-          source={require("@/assets/logos/doia.png")}
-          className="w-20 h-[22px]"
-        />
-      </View>
       <View className="flex">
         <Text className="pb-14 text-center font-poppins-medium text-lg font-bold">
           ¡Te recomendamos los siguientes productos!
