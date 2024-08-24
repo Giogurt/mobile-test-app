@@ -9,8 +9,9 @@ interface ButtonProps extends PressableProps {
 
 const variantStyles = {
   default: "rounded-full bg-doia-dark text-white shadow active:bg-doia-dark/90",
-  primary: "bg-blue-500 text-white",
-  secondary: "bg-white-500 text-black",
+  outline: "border border-doia-dark text-doia-dark",
+  // primary: "bg-blue-500 text-white",
+  // secondary: "bg-white-500 text-black",
 };
 
 const sizeStyles = {
@@ -20,9 +21,10 @@ const sizeStyles = {
   icon: "h-9 w-9",
 };
 
-// const textStyles = {
-//   default: "font-poppins text-base",
-// };
+const textStyles = {
+  default: "text-white text-base leading-4 ios:pt-1 font-poppins",
+  outline: "text-doia-dark text-base leading-4 ios:pt-[3px] font-poppins",
+};
 
 const sharedStyle =
   "inline-flex items-center justify-center whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-slate-300";
@@ -39,9 +41,7 @@ function Button({
       className={`${sharedStyle} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
       {...props}
     >
-      <Text className="text-white text-base leading-4 ios:pt-1 font-poppins">
-        {children as ReactNode}
-      </Text>
+      <Text className={`${textStyles[variant]}`}>{children as ReactNode}</Text>
     </Pressable>
   );
 }

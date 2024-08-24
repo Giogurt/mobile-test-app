@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Text, TextInput, View } from "react-native";
 import Button from "@/components/Button";
 import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 export default function Index() {
-  const steps = 5;
+  const steps = 4;
   const [step, setStep] = useState(0);
 
   // Form
@@ -18,7 +18,7 @@ export default function Index() {
   const genderOptions: RadioButtonProps[] = useMemo(
     () => [
       {
-        id: "1", // acts as primary key, should be unique and non-empty string
+        id: "1",
         label: "Femenino",
         value: "female",
       },
@@ -97,14 +97,12 @@ export default function Index() {
   function renderStep() {
     switch (step) {
       case 0:
-        return imageQuestion();
-      case 1:
         return ageQuestion();
-      case 2:
+      case 1:
         return genderQuestion();
-      case 3:
+      case 2:
         return skinTypeQuestion();
-      case 4:
+      case 3:
         return emailQuestion();
       default:
         return ageQuestion();
@@ -118,8 +116,31 @@ export default function Index() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+      cameraType: ImagePicker.CameraType.front,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+  const takeImage = async () => {
+    const cameraPermissions = await ImagePicker.getCameraPermissionsAsync();
+
+    if (!cameraPermissions.granted) {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        return;
+      }
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      cameraType: ImagePicker.CameraType.front,
     });
 
     if (!result.canceled) {
@@ -129,12 +150,38 @@ export default function Index() {
 
   function imageQuestion() {
     return (
-      <View className="items-center">
-        <Text>Solo demostrativo</Text>
-        <Button className="rounded-full" onPress={pickImage}>
-          Select image
-        </Button>
-        {image && <Image source={{ uri: image }} className="w-50 h-50" />}
+      <View className="flex items-center">
+        <Text className="text-center font-poppins text-lg font-bold pb-5">
+          Toma una foto o elige una imagen
+        </Text>
+        <View className="flex flex-row gap-x-2 pb-10">
+          <Button
+            variant="outline"
+            className="rounded-full"
+            onPress={takeImage}
+          >
+            Toma una foto
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded-full"
+            onPress={pickImage}
+          >
+            Seleccionar imagen
+          </Button>
+        </View>
+        {image && (
+          <Image
+            source={{ uri: image }}
+            className="rounded-full w-[300px] h-[300px]"
+          />
+        )}
+
+        {!image && (
+          <Text className="text-center font-poppins text-lg font-bold">
+            No ha seleccionado una imagen
+          </Text>
+        )}
       </View>
     );
   }
@@ -252,12 +299,6 @@ export default function Index() {
 
   return (
     <View className="flex p-4 gap-y-20">
-      <View className="flex flex-row justify-center">
-        <Image
-          source={require("@/assets/logos/doia.png")}
-          className="w-20 h-[22px]"
-        />
-      </View>
       <View className="flex gap-6">
         {renderStep()}
         <View className="flex-row justify-end gap-2">

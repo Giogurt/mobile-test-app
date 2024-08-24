@@ -3,8 +3,8 @@ module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
-      poppins: ["poppins", "sans-serif"],
-      "poppins-medium": ["poppins-medium", "sans-serif"],
+      poppins: ["PoppinsRegular"],
+      "poppins-medium": ["PoppinsMedium"],
     },
     extend: {
       colors: {

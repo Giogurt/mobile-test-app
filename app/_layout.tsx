@@ -1,9 +1,19 @@
-// import { Stack } from "expo-router";
+import { Stack } from "expo-router/stack";
+import { Image } from "expo-image";
 
-// export default function RootLayout() {
-//   return (
-//     <Stack>
-//       <Stack.Screen name="index" />
-//     </Stack>
-//   );
-// }
+function LogoTitle() {
+  return (
+    <Image
+      source={require("@/assets/logos/doia.png")}
+      className="w-20 h-[22px]"
+    />
+  );
+}
+
+export default function Layout() {
+  return (
+    <Stack screenOptions={{ headerTitle: () => <LogoTitle /> }}>
+      <Stack.Screen name="(tabs)" />
+    </Stack>
+  );
+}
