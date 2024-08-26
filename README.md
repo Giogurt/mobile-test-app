@@ -1,8 +1,8 @@
-# Welcome to your Expo app 👋
+# Derma App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Simple mobile app made in react native to familiarize with the framework and tools to create hibrid apps.
 
-## Get started
+## Run Locally
 
 1. Install dependencies
 
@@ -16,35 +16,46 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   or
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+    npm start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Deploy to Review/QA
 
-## Get a fresh project
+Make sure to change all your environment variables values to the one corresponding to the environment you are going to deploy.
 
-When you're ready, run:
+There are three main methods to do this using expo: app store testing tracks, internal distribution, and development builds with EAS Update.
 
-```bash
-npm run reset-project
+We will be using Internal distribution method but some steps overlap in all methods
+
+### 1. Create a build profile.
+
+We will use the `preview` profile. To do this we create the `eas.json`
+
+```json
+{
+  "build": {
+    "preview": {
+      "distribution": "internal"
+    }
+  }
+}
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Setup who can access the app
 
-## Learn more
+On a free Apple Developer account we need to manually specify which devices can run this app by entering their UUID after running the command and with the help of a credentials.json file
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+eas device:create
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. Create a build
 
-## Join the community
+We now create a build with the preview profile. This will then generate a link that can be shared with any android phone and the iphones that match the UUID codes registered.
 
-Join our community of developers creating universal apps.
+### 4. (USER SIDE) Install the app
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+As a user you only need to install the app by following the link. If you are on IOS 16 you need to enable developer mode before you can run the app.
