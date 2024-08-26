@@ -14,6 +14,7 @@ export default function Index() {
   const [age, setAge] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   // Radio buttons
   const genderOptions: RadioButtonProps[] = useMemo(
@@ -67,6 +68,13 @@ export default function Index() {
   const [selectedSkinTypeId, setSelectedSkinTypeId] = useState<string>("1");
 
   function handleStep(nextStep: number) {
+    if (!validateField()) {
+      setError(true);
+      return;
+    }
+
+    setError(false);
+
     if (step + nextStep === steps) {
       return;
     }
@@ -115,19 +123,39 @@ export default function Index() {
     }
   }
 
+  function validateField() {
+    if (step === 0) {
+      const intAge = parseInt(age);
+      return age.length > 0 && intAge > 0 && intAge < 120;
+    }
+    if (step === 3) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email) && email.length > 0;
+    }
+    return true;
+  }
+
   function ageQuestion() {
     return (
       <View className="flex gap-y-6 justify-center">
-        <Text className="font-poppins-medium text-lg font-bold">
-          ¿Qué edad tienes?
-        </Text>
+        <Text className=" text-lg font-bold">¿Qué edad tienes?</Text>
         <TextInput
-          className="h-16 font-poppins rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
+          className="h-16  rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
           placeholder="21"
           keyboardType="numeric"
           value={age}
-          onChangeText={setAge}
+          onChangeText={(value) => {
+            setAge(value);
+            if (error) {
+              setError(false);
+            }
+          }}
         />
+        {error && (
+          <Text className="text-red-500">
+            Por favor, ingresa una edad válida
+          </Text>
+        )}
       </View>
     );
   }
@@ -136,10 +164,10 @@ export default function Index() {
     return (
       <View className="flex gap-y-6 justify-center">
         <View className="flex gap-y-2">
-          <Text className="font-poppins-medium text-lg font-bold">
+          <Text className=" text-lg font-bold">
             ¿Cuál es tu sexo biológico?
           </Text>
-          <Text className="font-poppins text-sm">
+          <Text className=" text-sm">
             Selecciona la opción que más se adecue a ti.
           </Text>
         </View>
@@ -171,10 +199,8 @@ export default function Index() {
     return (
       <View className="flex gap-y-6 justify-center">
         <View className="flex gap-y-2">
-          <Text className="font-poppins-medium text-lg font-bold">
-            Tipo de piel
-          </Text>
-          <Text className="font-poppins text-sm">
+          <Text className="text-lg font-bold">Tipo de piel</Text>
+          <Text className="text-sm">
             Selecciona el tipo de piel que más se adecue a tu piel.
           </Text>
         </View>
@@ -205,21 +231,31 @@ export default function Index() {
     return (
       <View className="flex gap-y-6 justify-center">
         <View className="flex gap-y-2">
-          <Text className="font-poppins-medium text-lg font-bold">
+          <Text className="text-lg font-bold">
             ¡Sé parte del lanzamiento de Derma App!
           </Text>
-          <Text className="font-poppins text-sm">
+          <Text className="text-sm">
             Comparte tu correo electrónico con nosotros para enterarte de
             futuros productos y recomendaciones para ti.
           </Text>
         </View>
         <TextInput
-          className="h-16 font-poppins rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
+          className="h-16 rounded-none text-base leading-4 border-none bg-doia-tertiary px-5 text-doia-dark"
           placeholder="contacto@dermaapp.com"
           keyboardType="email-address"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(value) => {
+            setEmail(value);
+            if (error) {
+              setError(false);
+            }
+          }}
         />
+        {error && (
+          <Text className="text-red-500">
+            Por favor, ingresa un correo electrónico válido
+          </Text>
+        )}
       </View>
     );
   }
@@ -258,7 +294,9 @@ export default function Index() {
         <View className="flex-row justify-end gap-2">
           {step > 0 && <Button onPress={() => handleStep(-1)}>Atrás</Button>}
           {step < steps - 1 && (
-            <Button onPress={() => handleStep(1)}>Siguiente</Button>
+            <Button disabled={error} onPress={() => handleStep(1)}>
+              Siguiente
+            </Button>
           )}
           {step === steps - 1 && (
             <Button disabled={!isChecked} onPress={handleSendSurvey}>

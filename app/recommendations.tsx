@@ -30,7 +30,7 @@ export default function RecommendationsScreen() {
   return (
     <View className="flex items-center p-4 gap-y-10 h-screen bg-white">
       <View className="flex">
-        <Text className="pb-14 text-center font-poppins-medium text-lg font-bold">
+        <Text className="pb-14 text-center text-lg font-bold">
           ¡Te recomendamos los siguientes productos!
         </Text>
 
@@ -43,7 +43,7 @@ export default function RecommendationsScreen() {
           />
         </View>
         <View className="flex gap-y-4 items-center">
-          <Text className="text-base leading-4 font-poppins font-bold">
+          <Text className="text-base leading-4 font-bold">
             Total $
             {recommendations.reduce((acc, product) => acc + product.price!, 0)}
           </Text>

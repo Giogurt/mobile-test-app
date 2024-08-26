@@ -22,8 +22,8 @@ const sizeStyles = {
 };
 
 const textStyles = {
-  default: "text-white text-base leading-4 ios:pt-1 font-poppins",
-  outline: "text-doia-dark text-base leading-4 ios:pt-[3px] font-poppins",
+  default: "text-white text-base leading-4 ios:pt-1",
+  outline: "text-doia-dark text-base leading-4 ios:pt-[3px]",
 };
 
 const sharedStyle =

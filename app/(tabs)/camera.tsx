@@ -44,7 +44,7 @@ export default function Index() {
 
   return (
     <View className="flex items-center p-4 pt-10 h-screen bg-white">
-      <Text className="text-center font-poppins text-lg font-bold pb-5">
+      <Text className="text-center  text-lg font-bold pb-5">
         Toma una foto o elige una imagen
       </Text>
       <View className="flex flex-row gap-x-2 pb-10">
@@ -63,7 +63,7 @@ export default function Index() {
       )}
 
       {!image && (
-        <Text className="text-center font-poppins text-lg font-bold">
+        <Text className="text-center  text-lg font-bold">
           No ha seleccionado una imagen
         </Text>
       )}
