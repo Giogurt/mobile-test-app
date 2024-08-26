@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Text, TextInput, View } from "react-native";
 import Button from "@/components/Button";
 import { createBasicSurvey } from "@/lib/db/queries";
 import { useMemo, useState } from "react";
@@ -15,6 +15,7 @@ export default function Index() {
   const [email, setEmail] = useState<string>("");
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Radio buttons
   const genderOptions: RadioButtonProps[] = useMemo(
@@ -96,12 +97,14 @@ export default function Index() {
     const gender = selectedGender()!.value!;
     const skinType = selectedSkinType()!.value!;
 
-    // await createBasicSurvey({
-    //   age: parseInt(age),
-    //   gender,
-    //   skinType,
-    //   email,
-    // });
+    setLoading(true);
+    await createBasicSurvey({
+      age: parseInt(age),
+      gender,
+      skinType,
+      email,
+    });
+    setLoading(false);
 
     router.replace(`/recommendations?skinType=${skinType}&bundle=favorite`);
   }
@@ -180,7 +183,6 @@ export default function Index() {
               paddingHorizontal: 16,
             }}
             labelStyle={{
-              fontFamily: "poppins",
               fontSize: 18,
               flex: 1,
               backgroundColor: "#F9F9F9",
@@ -213,7 +215,6 @@ export default function Index() {
               paddingHorizontal: 16,
             }}
             labelStyle={{
-              fontFamily: "poppins",
               fontSize: 18,
               flex: 1,
               backgroundColor: "#F9F9F9",
@@ -300,7 +301,11 @@ export default function Index() {
           )}
           {step === steps - 1 && (
             <Button disabled={!isChecked} onPress={handleSendSurvey}>
-              Ver mis resultados
+              {!!!loading ? (
+                "Ver mis resultados"
+              ) : (
+                <ActivityIndicator size="small" color="white" />
+              )}
             </Button>
           )}
         </View>

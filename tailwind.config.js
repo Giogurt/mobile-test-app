@@ -2,10 +2,10 @@
 module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    fontFamily: {
-      poppins: ["PoppinsRegular"],
-      "poppins-medium": ["PoppinsMedium"],
-    },
+    // fontFamily: {
+    //   poppins: ["PoppinsRegular"],
+    //   "poppins-medium": ["PoppinsMedium"],
+    // },
     extend: {
       colors: {
         doia: {

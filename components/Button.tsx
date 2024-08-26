@@ -9,7 +9,7 @@ interface ButtonProps extends PressableProps {
 
 const variantStyles = {
   default: "rounded-full bg-doia-dark text-white shadow active:bg-doia-dark/90",
-  outline: "border border-doia-dark text-doia-dark",
+  outline: "rounded-full border border-doia-dark text-doia-dark",
   // primary: "bg-blue-500 text-white",
   // secondary: "bg-white-500 text-black",
 };

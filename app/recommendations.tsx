@@ -1,7 +1,7 @@
 import { getBasicRecommendations, type Products } from "@/lib/db/queries";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Image, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import Button from "@/components/Button";
 import { ProductCard } from "@/components/ProductCard";
 
@@ -13,7 +13,7 @@ export default function RecommendationsScreen() {
   const params = useLocalSearchParams<RecommendationsScreenParams>();
 
   const [recommendations, setRecommendations] = useState<Products>([]);
-  const [checkout, setCheckout] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,10 +22,19 @@ export default function RecommendationsScreen() {
         params.bundle
       );
 
+      setLoading(false);
       setRecommendations(result.data);
     };
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <View className="flex pt-40 h-screen bg-white">
+        <ActivityIndicator size="large" color="#454954" />
+      </View>
+    );
+  }
 
   return (
     <View className="flex items-center p-4 gap-y-10 h-screen bg-white">
@@ -47,7 +56,13 @@ export default function RecommendationsScreen() {
             Total $
             {recommendations.reduce((acc, product) => acc + product.price!, 0)}
           </Text>
-          <Button onPress={() => setCheckout(true)}>Comprar</Button>
+          <Button
+            onPress={() => {
+              router.replace("/(tabs)/");
+            }}
+          >
+            Realizar el test otra vez
+          </Button>
         </View>
       </View>
     </View>

@@ -12,8 +12,17 @@ function LogoTitle() {
 
 export default function Layout() {
   return (
-    <Stack screenOptions={{ headerTitle: () => <LogoTitle /> }}>
-      <Stack.Screen name="(tabs)" />
+    <Stack
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerTitle: () => <LogoTitle />,
+      }}
+    >
+      <Stack.Screen name="(tabs)" options={{ title: "test" }} />
+      <Stack.Screen
+        name="recommendations"
+        options={{ title: "Recomendaciones" }}
+      />
     </Stack>
   );
 }
