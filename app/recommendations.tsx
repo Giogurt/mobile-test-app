@@ -28,7 +28,7 @@ export default function RecommendationsScreen() {
   }, []);
 
   return (
-    <View className="flex items-center p-4 gap-y-10">
+    <View className="flex items-center p-4 gap-y-10 h-screen bg-white">
       <View className="flex">
         <Text className="pb-14 text-center font-poppins-medium text-lg font-bold">
           ¡Te recomendamos los siguientes productos!

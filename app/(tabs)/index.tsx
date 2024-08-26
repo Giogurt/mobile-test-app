@@ -252,7 +252,7 @@ export default function Index() {
   }
 
   return (
-    <View className="flex p-4 gap-y-20">
+    <View className="flex p-4 gap-y-20 bg-white h-screen">
       <View className="flex gap-6">
         {renderStep()}
         <View className="flex-row justify-end gap-2">

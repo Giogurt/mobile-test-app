@@ -43,7 +43,7 @@ export default function Index() {
   };
 
   return (
-    <View className="flex items-center p-4 pt-10">
+    <View className="flex items-center p-4 pt-10 h-screen bg-white">
       <Text className="text-center font-poppins text-lg font-bold pb-5">
         Toma una foto o elige una imagen
       </Text>
