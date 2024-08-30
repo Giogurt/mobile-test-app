@@ -21,7 +21,10 @@ export type Products = {
 }[];
 
 export async function createBasicSurvey(surveyData: BasicSurveyData) {
-  return axios.post("http://localhost:3000/api/basicSurvey", surveyData);
+  return axios.post(
+    `${process.env.EXPO_PUBLIC_API_URL}api/basicSurvey`,
+    surveyData
+  );
 }
 
 export async function getBasicRecommendations(
@@ -29,6 +32,6 @@ export async function getBasicRecommendations(
   bundle: string
 ) {
   return axios.get<Products>(
-    `http://localhost:3000/api/recommendations?skinType=${skinType}&bundle=${bundle}`
+    `${process.env.EXPO_PUBLIC_API_URL}api/recommendations?skinType=${skinType}&bundle=${bundle}`
   );
 }
